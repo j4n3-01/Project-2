@@ -1,0 +1,191 @@
+Project Description
+
+This program reads numerical and categorical data from files, performs statistical analysis using Python fundamentals, applies object-oriented programming (OOP), handles errors, and saves results to a report file.
+
+⸻
+
+1. Variables & File Handling
+
+Assumption
+	•	data.csv → contains numerical data (e.g. student scores)
+	•	categories.txt → contains categorical data (e.g. course names)
+
+⸻
+
+2. Error Handling
+	•	Handles missing files
+	•	Handles empty files
+	•	Handles invalid (non-numeric) values
+
+⸻
+
+3. Functions
+
+Functions are created to calculate:
+	•	Total
+	•	Average
+	•	Minimum
+	•	Maximum
+
+⸻
+
+4. Operators & Loops
+	•	Arithmetic operators used
+	•	for loop used to traverse the dataset
+
+⸻
+
+5. Conditional Statements
+	•	Displays “High Performance” if average is above a threshold
+	•	Otherwise displays “Needs Improvement”
+
+⸻
+
+6. Sets
+	•	Extracts unique categorical values
+	•	Counts total unique categories
+
+⸻
+
+7. Object-Oriented Programming (OOP)
+
+A DataSet class is created with required methods.
+
+⸻
+
+8. Saving Results
+
+Results are saved into report.txt
+
+⸻
+
+FULL PYTHON CODE
+
+# GSE301 Data Science Assignment
+# Author: Student
+# Description: Data analysis using Python fundamentals
+
+class DataSet:
+    def __init__(self, data_file, category_file):
+        self.data_file = data_file
+        self.category_file = category_file
+        self.data = []
+        self.categories = set()
+        self.total = 0
+        self.average = 0
+        self.minimum = None
+        self.maximum = None
+
+    # -------------------------------
+    # Load Data
+    # -------------------------------
+    def load_data(self):
+        try:
+            with open(self.data_file, 'r') as file:
+                for line in file:
+                    value = line.strip()
+                    if value:
+                        self.data.append(float(value))
+        except FileNotFoundError:
+            print("Error: Data file not found.")
+        except ValueError:
+            print("Error: Invalid (non-numeric) data found.")
+
+        try:
+            with open(self.category_file, 'r') as file:
+                for line in file:
+                    category = line.strip()
+                    if category:
+                        self.categories.add(category)
+        except FileNotFoundError:
+            print("Error: Category file not found.")
+
+    # -------------------------------
+    # Statistical Calculations
+    # -------------------------------
+    def calculate_statistics(self):
+        if not self.data:
+            print("No data available for analysis.")
+            return
+
+        count = 0
+        self.total = 0
+        self.minimum = self.data[0]
+        self.maximum = self.data[0]
+
+        for value in self.data:
+            self.total += value
+            count += 1
+
+            if value < self.minimum:
+                self.minimum = value
+            if value > self.maximum:
+                self.maximum = value
+
+        self.average = self.total / count
+
+    # -------------------------------
+    # Display Results
+    # -------------------------------
+    def display_results(self):
+        print("----- DATA ANALYSIS RESULTS -----")
+        print(f"Total: {self.total}")
+        print(f"Average: {self.average}")
+        print(f"Minimum: {self.minimum}")
+        print(f"Maximum: {self.maximum}")
+
+        if self.average >= 50:
+            print("Performance: High Performance")
+        else:
+            print("Performance: Needs Improvement")
+
+        print(f"Unique Categories: {len(self.categories)}")
+
+    # -------------------------------
+    # Save Results to File
+    # -------------------------------
+    def save_results(self):
+        with open("report.txt", "w") as file:
+            file.write("DATA ANALYSIS REPORT\n")
+            file.write("---------------------\n")
+            file.write(f"Total: {self.total}\n")
+            file.write(f"Average: {self.average}\n")
+            file.write(f"Minimum: {self.minimum}\n")
+            file.write(f"Maximum: {self.maximum}\n")
+            file.write(f"Unique Categories: {len(self.categories)}\n")
+
+            if self.average >= 50:
+                file.write("Performance: High Performance\n")
+            else:
+                file.write("Performance: Needs Improvement\n")
+
+# -------------------------------
+# Main Program Execution
+# -------------------------------
+dataset = DataSet("data.csv", "categories.txt")
+dataset.load_data()
+dataset.calculate_statistics()
+dataset.display_results()
+dataset.save_results()
+
+
+⸻
+
+Sample Input Files
+
+data.csv
+
+45
+67
+89
+34
+78
+90
+
+categories.txt
+
+Mathematics
+Physics
+Chemistry
+Mathematics
+Biology
